@@ -67,6 +67,7 @@ Drug names are normalized (lowercase, no spaces) for fuzzy matching. E.g., "Amox
 The API auto-detects the LLM provider from the API key prefix:
 - `sk-ant-*` → Anthropic (Claude)
 - `sk-*` → OpenAI (GPT)
+- `gsk_*` → Groq (Llama)
 - Other → Google (Gemini)
 
 ### 5. Scalability
@@ -86,7 +87,7 @@ The API auto-detects the LLM provider from the API key prefix:
 - **Frontend:** Next.js 15 + TypeScript + Tailwind CSS
 - **Backend:** Next.js API routes (serverless)
 - **Database:** Supabase (PostgreSQL)
-- **LLM:** Supports Claude, GPT, and Gemini
+- **LLM:** Supports Claude, GPT, Gemini, and Groq (Llama)
 - **Caching:** In-memory with 5-min TTL
 
 ## Innovation Features

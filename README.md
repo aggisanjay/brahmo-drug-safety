@@ -7,7 +7,7 @@ A deterministic drug safety layer that runs **before** AI responds, ensuring 100
 ### Prerequisites
 - Node.js v18+
 - Supabase account (free tier)
-- LLM API key (Anthropic/OpenAI/Google — free credits sufficient)
+- LLM API key (Anthropic/OpenAI/Google/Groq — free credits sufficient)
 
 ### Setup
 
@@ -41,6 +41,7 @@ LLM_API_KEY=your_api_key_here
 The LLM API key auto-detects the provider:
 - `sk-ant-*` → Anthropic Claude
 - `sk-*` → OpenAI GPT
+- `gsk_*` → Groq Llama
 - Other → Google Gemini
 
 ## Features
