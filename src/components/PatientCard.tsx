@@ -184,7 +184,6 @@ export default function PatientCard({ patient }: PatientCardProps) {
             {patient.allergies.map((a, i) => {
               const isAnaphylaxis = a.severity === 'anaphylaxis';
               const isSevere = a.severity === 'severe';
-              const isMild = a.severity === 'mild' || a.severity === 'moderate';
               const allergyClass = isAnaphylaxis ? 'allergy-critical' : isSevere ? 'allergy-severe' : 'allergy-mild';
               const severityText = isAnaphylaxis ? 'Anaphylaxis' : isSevere ? 'Severe' : 'Mild';
 
@@ -257,7 +256,7 @@ export default function PatientCard({ patient }: PatientCardProps) {
               <span>Clinical Scenario Brief</span>
             </h4>
             <p style={{ fontSize: '12px', color: 'var(--text-secondary)', fontStyle: 'italic', lineHeight: '1.5' }}>
-              "{patient.notes}"
+              &ldquo;{patient.notes}&rdquo;
             </p>
           </div>
         )}

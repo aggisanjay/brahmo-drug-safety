@@ -5,8 +5,8 @@ import SafetyAlerts from '@/components/SafetyAlerts';
 import ResponseComparison from '@/components/ResponseComparison';
 import { patients } from '@/lib/patients';
 import type { Patient, SafetyCheckResult } from '@/lib/types';
+import Image from 'next/image';
 import {
-  ShieldIcon,
   ShieldCheckIcon,
   ShieldXIcon,
   AlertTriangleIcon,
@@ -18,7 +18,6 @@ import {
   SearchIcon,
   LightningIcon,
   UserAvatar,
-  BrahmoLogoIcon,
 } from '@/components/icons';
 
 interface QueryTemplate {
@@ -108,9 +107,28 @@ export default function Home() {
   const [genericModel, setGenericModel] = useState('');
   const [enhancedModel, setEnhancedModel] = useState('');
 
+  const handleSafetyCheck = async (patientToCheck = selectedPatient, questionToCheck = question): Promise<SafetyCheckResult | null> => {
+    setSafetyLoading(true);
+    try {
+      const res = await fetch('/api/safety-check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ patient: patientToCheck, question: questionToCheck }),
+      });
+      const data = await res.json();
+      setSafetyResult(data);
+      return data;
+    } catch (err) {
+      console.error('Safety check error:', err);
+      return null;
+    } finally {
+      setSafetyLoading(false);
+    }
+  };
+
   // Trigger initial safety check on mount
   useEffect(() => {
-    handleSafetyCheck();
+    handleSafetyCheck(patients[0], DEMO_QUESTIONS[1] || '');
   }, []);
 
   const handlePatientSelect = async (patient: Patient) => {
@@ -155,25 +173,6 @@ export default function Home() {
       setSafetyResult(data);
     } catch (err) {
       console.error('Template safety check error:', err);
-    } finally {
-      setSafetyLoading(false);
-    }
-  };
-
-  const handleSafetyCheck = async (): Promise<SafetyCheckResult | null> => {
-    setSafetyLoading(true);
-    try {
-      const res = await fetch('/api/safety-check', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ patient: selectedPatient, question }),
-      });
-      const data = await res.json();
-      setSafetyResult(data);
-      return data;
-    } catch (err) {
-      console.error('Safety check error:', err);
-      return null;
     } finally {
       setSafetyLoading(false);
     }
@@ -255,11 +254,13 @@ export default function Home() {
       <header className="app-header">
         <div className="header-content">
           <div className="header-left">
-            <div className="logo-icon" style={{ overflow: 'hidden' }}>
-              <img 
+            <div className="logo-icon" style={{ overflow: 'hidden', position: 'relative' }}>
+              <Image 
                 src="/brahmo_logo.png" 
                 alt="Brahmo Logo" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'inherit' }} 
+                fill
+                sizes="44px"
+                style={{ objectFit: 'cover', borderRadius: 'inherit' }} 
               />
             </div>
             <div>
@@ -372,7 +373,7 @@ export default function Home() {
               <div className="button-row">
                 <button
                   className="btn btn-safety"
-                  onClick={handleSafetyCheck}
+                  onClick={() => handleSafetyCheck()}
                   disabled={!question.trim() || safetyLoading}
                   style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
                 >

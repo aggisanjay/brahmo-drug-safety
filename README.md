@@ -51,14 +51,16 @@ The LLM API key auto-detects the provider:
 3. **Renal Dosing Check** — Compares drug thresholds against patient eGFR
 4. **Clinical Calculators** — eGFR (CKD-EPI 2021) + CHA₂DS₂-VASc
 
-### Data
-- 50 medications with renal dosing rules
-- 30 drug interaction pairs (CONTRAINDICATED/SEVERE/MODERATE/MINOR)
-- 8 allergy cross-reactivity rules
-- 10 pre-loaded patients (4 demo scenarios)
+## Data & Reference Sources
+- **56 Medications** with renal dosing rules (including 6 newly added scenario-specific drugs)
+- **33 Drug Interaction Pairs** (CONTRAINDICATED / SEVERE / MODERATE / MINOR)
+- **8 Allergy Cross-Reactivity Rules** (direct drug class matching and cross-reactivity risk percentages)
+- **10 Pre-loaded Patient Profiles** (covering 4 key clinical demo scenarios)
+
+For detailed information on the scientific guidelines, medical consensus, and equations (e.g., CKD-EPI 2021, CHA₂DS₂-VASc) behind this clinical database, see [data_sources.md](data_sources.md).
 
 ### Architecture
-See [docs/architecture.md](docs/architecture.md) for full details.
+See [docs/architecture.md](docs/architecture.md) for full details on the deterministic safety shield design.
 
 ## Demo Scenarios
 

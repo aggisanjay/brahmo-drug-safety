@@ -10,7 +10,6 @@ import {
   AlertTriangleIcon,
   InfoIcon,
   ClockIcon,
-  CheckIcon,
   PillIcon,
   BeakerIcon,
   ActivityIcon,
