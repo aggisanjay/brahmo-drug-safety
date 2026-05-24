@@ -79,8 +79,8 @@ The API auto-detects the LLM provider from the API key prefix:
 
 | Table | Rows | Purpose |
 |-------|------|---------|
-| `drugs` | 50 | All medications with renal dosing JSONB |
-| `drug_interactions` | 30 | Interaction pairs with severity + management |
+| `drugs` | 56 | All medications with renal dosing JSONB (core list + scenario additions) |
+| `drug_interactions` | 33 | Interaction pairs with severity + management (core list + scenario additions) |
 | `allergy_cross_reactivity` | 8 | Cross-reactivity rules between drug classes |
 
 ## Tech Stack
