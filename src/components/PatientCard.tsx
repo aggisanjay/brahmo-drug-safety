@@ -1,5 +1,6 @@
 'use client';
 import type { Patient } from '@/lib/types';
+import { calculateEGFR } from '@/lib/calculators';
 import {
   PillIcon,
   AlertTriangleIcon,
@@ -144,6 +145,20 @@ export default function PatientCard({ patient }: PatientCardProps) {
   return (
     <div className="patient-card">
       <div className="patient-card-header">
+        <div style={{ 
+          fontSize: '10px', 
+          fontWeight: 800, 
+          color: 'var(--accent-cyan)', 
+          textTransform: 'uppercase', 
+          letterSpacing: '0.08em', 
+          marginBottom: '8px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '6px' 
+        }}>
+          <FileTextIcon size={12} style={{ color: 'var(--accent-cyan)' }} />
+          <span>EHR Patient Record</span>
+        </div>
         <div className="patient-name-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
             <h3 style={{ fontSize: '18px', fontWeight: 800, color: 'var(--text-primary)' }}>{patient.name.split(' — ')[0]}</h3>
@@ -205,7 +220,13 @@ export default function PatientCard({ patient }: PatientCardProps) {
           </h4>
           <div className="lab-grid">
             {renderLab('Serum Creatinine', patient.labs.creatinine, 'mg/dL')}
-            {renderLab('eGFR (CKD-EPI)', patient.labs.eGFR, 'mL/min')}
+            {renderLab(
+              'eGFR (CKD-EPI)', 
+              patient.labs.creatinine 
+                ? calculateEGFR(patient.labs.creatinine, patient.age, patient.sex).value 
+                : patient.labs.eGFR, 
+              'mL/min'
+            )}
             {renderLab('Potassium (K+)', patient.labs.potassium, 'mEq/L')}
             {renderLab('HbA1c', patient.labs.hba1c, '%')}
             {renderLab('INR (Ratio)', patient.labs.inr)}

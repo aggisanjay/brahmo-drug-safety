@@ -515,3 +515,26 @@ export function BrahmoLogoIcon({ size = 24, className, ...props }: IconProps) {
   );
 }
 
+// 22. Interactions (crossover arrows/shuffle)
+export function InteractionsIcon({ size = 16, className, ...props }: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      {...props}
+    >
+      <path d="M18 4H6a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H6" />
+      <polyline points="10 15 6 19 10 23" />
+      <polyline points="14 9 18 5 14 1" />
+    </svg>
+  );
+}
+

@@ -18,6 +18,8 @@ import {
   SearchIcon,
   LightningIcon,
   UserAvatar,
+  InteractionsIcon,
+  ShieldIcon,
 } from '@/components/icons';
 
 interface QueryTemplate {
@@ -243,6 +245,10 @@ export default function Home() {
     handleEnhancedAsk();
   };
 
+  const drugsCount = safetyResult?.dbMetrics?.drugsCount ?? 56;
+  const interactionsCount = safetyResult?.dbMetrics?.interactionsCount ?? 33;
+  const allergiesCount = safetyResult?.dbMetrics?.allergiesCount ?? 8;
+
   return (
     <div className="app-container">
       {/* Background ambient glows */}
@@ -273,9 +279,17 @@ export default function Home() {
               <div className="status-dot"></div>
               <span>Engine Status: Online</span>
             </div>
-            <div className="status-pill">
-              <div className="status-dot blue"></div>
-              <span>Clinical DB: Connected</span>
+            <div className="status-pill" title="Seeded Drugs in Database" style={{ display: 'flex', alignItems: 'center' }}>
+              <PillIcon size={14} style={{ color: '#ef4444', marginRight: '5px', flexShrink: 0 }} />
+              <span><strong>{drugsCount}</strong> Drugs</span>
+            </div>
+            <div className="status-pill" title="Seeded Interaction Rules" style={{ display: 'flex', alignItems: 'center' }}>
+              <InteractionsIcon size={14} style={{ color: '#f59e0b', marginRight: '5px', flexShrink: 0 }} />
+              <span><strong>{interactionsCount}</strong> Interactions</span>
+            </div>
+            <div className="status-pill" title="Seeded Allergy Cross-Reactivity Rules" style={{ display: 'flex', alignItems: 'center' }}>
+              <ShieldIcon size={14} style={{ color: '#10b981', marginRight: '5px', flexShrink: 0 }} />
+              <span><strong>{allergiesCount}</strong> Allergy Rules</span>
             </div>
             <span className="header-badge">Clinical Copilot v1.2</span>
           </div>
@@ -337,6 +351,20 @@ export default function Home() {
           <div className="right-column">
             {/* Question Input */}
             <div className="question-section">
+              <div style={{ 
+                fontSize: '10px', 
+                fontWeight: 800, 
+                color: 'var(--accent-blue)', 
+                textTransform: 'uppercase', 
+                letterSpacing: '0.08em', 
+                marginBottom: '8px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '6px' 
+              }}>
+                <StethoscopeIcon size={12} style={{ color: 'var(--accent-blue)' }} />
+                <span>Clinical Verification Engine</span>
+              </div>
               <h2 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <StethoscopeIcon size={20} style={{ color: 'var(--accent-cyan)' }} />
                 <span>Clinical Decision Support Console</span>
@@ -418,6 +446,7 @@ export default function Home() {
               enhancedLoading={enhancedLoading}
               genericModel={genericModel}
               enhancedModel={enhancedModel}
+              safetyResult={safetyResult}
             />
           </div>
         </div>

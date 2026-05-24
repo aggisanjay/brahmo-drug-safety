@@ -10,7 +10,7 @@ export const patients: Patient[] = [
       { name: 'Atorvastatin', dose: '20mg HS' },
     ],
     allergies: [{ allergen: 'Penicillin', reaction: 'ANAPHYLAXIS', severity: 'anaphylaxis' }],
-    labs: { creatinine: 2.1, eGFR: 31.2, hba1c: 8.4, potassium: 5.1, troponin: 4.8 },
+    labs: { creatinine: 2.1, eGFR: 34.3, hba1c: 8.4, potassium: 5.1, troponin: 4.8 },
     vitals: { hr: 110, bp_systolic: 90, bp_diastolic: 60, spo2: 94 },
     notes: 'Demo Scenario 2: Penicillin anaphylaxis + CKD',
   },
@@ -23,7 +23,7 @@ export const patients: Patient[] = [
       { name: 'Pantoprazole', dose: '40mg' },
     ],
     allergies: [{ allergen: 'NKDA', reaction: 'None', severity: 'mild' }],
-    labs: { creatinine: 0.9, eGFR: 82, hemoglobin: 10.2 },
+    labs: { creatinine: 0.9, eGFR: 74.1, hemoglobin: 10.2 },
   },
   {
     id: 3, name: 'Patient 3 — Polypharmacy Elderly', age: 78, sex: 'M', isDemo: true,
@@ -42,7 +42,7 @@ export const patients: Patient[] = [
       { name: 'Calcium+D3', dose: 'daily' },
     ],
     allergies: [{ allergen: 'Sulfonamide', reaction: 'Rash', severity: 'mild' }],
-    labs: { creatinine: 1.4, eGFR: 48, potassium: 4.8 },
+    labs: { creatinine: 1.4, eGFR: 51.4, potassium: 4.8 },
     notes: 'Demo Scenario 1: Polypharmacy + Clarithromycin risk',
   },
   {
@@ -63,7 +63,7 @@ export const patients: Patient[] = [
       { name: 'Calcium', dose: '500mg TDS' },
     ],
     allergies: [{ allergen: 'ACE inhibitor', reaction: 'Angioedema', severity: 'severe' }],
-    labs: { creatinine: 4.8, eGFR: 12, potassium: 5.6 },
+    labs: { creatinine: 4.8, eGFR: 13, potassium: 5.6 },
     notes: 'CKD Stage 5. ACE inhibitor angioedema history.',
   },
   {
@@ -85,7 +85,7 @@ export const patients: Patient[] = [
       { name: 'Pantoprazole', dose: '40mg IV' },
     ],
     allergies: [{ allergen: 'Penicillin', reaction: 'Rash (NOT anaphylaxis)', severity: 'mild' }],
-    labs: { creatinine: 3.2, eGFR: 18, wbc: 22, lactate: 4.8 },
+    labs: { creatinine: 3.2, eGFR: 18.7, wbc: 22, lactate: 4.8 },
     vitals: { hr: 118, bp_systolic: 85, bp_diastolic: 50, spo2: 92, rr: 28, temp: 39.2 },
     notes: 'Demo Scenario 3: ICU, eGFR 18, Gabapentin dosing',
   },
@@ -100,7 +100,7 @@ export const patients: Patient[] = [
       { name: 'Spironolactone', dose: '25mg' },
     ],
     allergies: [{ allergen: 'NKDA', reaction: 'None', severity: 'mild' }],
-    labs: { creatinine: 1.1, eGFR: 62, potassium: 4.9, inr: 2.8, bnp: 450 },
+    labs: { creatinine: 1.1, eGFR: 73.1, potassium: 4.9, inr: 2.8, bnp: 450 },
     conditions: [
       { name: 'AF (Atrial Fibrillation)', active: true },
       { name: 'CHF (Heart Failure, EF 35%)', active: true },
@@ -120,7 +120,7 @@ export const patients: Patient[] = [
       { name: 'Aspirin', dose: '75mg' },
     ],
     allergies: [{ allergen: 'Metoclopramide', reaction: 'Dystonia', severity: 'moderate' }],
-    labs: { creatinine: 1.0, eGFR: 72, hba1c: 7.8 },
+    labs: { creatinine: 1.0, eGFR: 88.9, hba1c: 7.8 },
   },
   {
     id: 10, name: 'Patient 10 — Pediatric Asthma', age: 10, sex: 'F', weight: 35, isDemo: false,

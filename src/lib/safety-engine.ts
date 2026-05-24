@@ -435,6 +435,11 @@ export async function runSafetyChecks(
     timestamp: new Date().toISOString(),
     checkDurationMs: Math.round(endTime - startTime),
     checksPerformed,
+    dbMetrics: {
+      drugsCount: drugCache ? drugCache.length : 0,
+      interactionsCount: interactionCache ? interactionCache.length : 0,
+      allergiesCount: allergyCache ? allergyCache.length : 0,
+    }
   };
 }
 

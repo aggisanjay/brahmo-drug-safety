@@ -114,6 +114,11 @@ export interface SafetyCheckResult {
   timestamp: string;
   checkDurationMs: number;
   checksPerformed: string[];
+  dbMetrics?: {
+    drugsCount: number;
+    interactionsCount: number;
+    allergiesCount: number;
+  };
 }
 
 export interface CHA2DS2VAScResult {

@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import type { SafetyCheckResult } from '@/lib/types';
 import {
   BrainIcon,
   ShieldIcon,
@@ -18,6 +19,7 @@ interface ResponseComparisonProps {
   enhancedLoading: boolean;
   genericModel: string;
   enhancedModel: string;
+  safetyResult?: SafetyCheckResult | null;
 }
 
 function renderMarkdown(text: string | null) {
@@ -135,10 +137,15 @@ export default function ResponseComparison({
   enhancedLoading,
   genericModel,
   enhancedModel,
+  safetyResult,
 }: ResponseComparisonProps) {
   const [copiedGeneric, setCopiedGeneric] = useState(false);
   const [copiedEnhanced, setCopiedEnhanced] = useState(false);
   const [expandedCard, setExpandedCard] = useState<'generic' | 'enhanced' | null>(null);
+
+  const criticalAlerts = safetyResult?.alerts?.filter(
+    a => a.severity === 'HARD_BLOCK' || a.severity === 'SEVERE'
+  ) || [];
 
   const handleCopyGeneric = () => {
     if (genericResponse) {
@@ -242,6 +249,135 @@ export default function ResponseComparison({
             </div>
           ) : enhancedResponse ? (
             <div className="response-content">
+              {criticalAlerts.map((alert, idx) => {
+                const isBlock = alert.severity === 'HARD_BLOCK';
+                
+                // Parse the title to get the main drug/subject and reason
+                let drugNamePart = '';
+                if (alert.title.includes(':')) {
+                  const parts = alert.title.split(':');
+                  const typePart = parts[0].trim();
+                  const restPart = parts[1].trim();
+                  if (typePart.toUpperCase().includes('ALLERGY') || typePart.toUpperCase().includes('BLOCK')) {
+                    drugNamePart = restPart.split(/\s+is\s+/i)[0].trim().toUpperCase();
+                  } else {
+                    drugNamePart = restPart.toUpperCase();
+                  }
+                } else {
+                  drugNamePart = alert.title.toUpperCase();
+                }
+
+                const reason = alert.details;
+                const action = alert.recommendation;
+
+                return (
+                  <div 
+                    key={idx} 
+                    className={`critical-safety-banner ${isBlock ? 'banner-block' : 'banner-severe'}`}
+                    style={{
+                      marginBottom: '20px',
+                      borderRadius: '8px',
+                      border: '1px solid ' + (isBlock ? '#fee2e2' : '#ffedd5'),
+                      borderLeft: '5px solid ' + (isBlock ? '#ef4444' : '#f97316'),
+                      background: isBlock ? '#fef2f2' : '#fff7ed',
+                      boxShadow: '0 4px 12px rgba(239, 68, 68, 0.05)',
+                      padding: '16px 20px',
+                      fontFamily: 'inherit',
+                    }}
+                  >
+                    {/* Header */}
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '8px', 
+                      marginBottom: '10px',
+                      borderBottom: '1px solid ' + (isBlock ? '#fee2e2' : '#ffedd5'),
+                      paddingBottom: '8px'
+                    }}>
+                      <span style={{ fontSize: '16px', display: 'flex', alignItems: 'center' }}>
+                        {isBlock ? '⛔' : '⚠️'}
+                      </span>
+                      <span style={{
+                        fontWeight: 900,
+                        fontSize: '12px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.08em',
+                        color: isBlock ? '#dc2626' : '#ea580c'
+                      }}>
+                        {isBlock ? 'HARD BLOCK' : 'SEVERE WARNING'}
+                      </span>
+                    </div>
+
+                    {/* Drug Name / Substance */}
+                    <div style={{ 
+                      fontSize: '18px', 
+                      fontWeight: 800, 
+                      color: '#111827', 
+                      marginBottom: '14px',
+                      letterSpacing: '-0.01em'
+                    }}>
+                      {drugNamePart}
+                    </div>
+
+                    {/* Information Grid */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      <div>
+                        <div style={{ 
+                          fontSize: '10px', 
+                          fontWeight: 700, 
+                          color: isBlock ? '#991b1b' : '#9a3412', 
+                          textTransform: 'uppercase', 
+                          letterSpacing: '0.05em',
+                          marginBottom: '2px'
+                        }}>
+                          Reason:
+                        </div>
+                        <div style={{ fontSize: '13px', color: '#374151', lineHeight: '1.45' }}>
+                          {reason}
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'flex', gap: '30px', flexWrap: 'wrap' }}>
+                        <div>
+                          <div style={{ 
+                            fontSize: '10px', 
+                            fontWeight: 700, 
+                            color: isBlock ? '#991b1b' : '#9a3412', 
+                            textTransform: 'uppercase', 
+                            letterSpacing: '0.05em',
+                            marginBottom: '2px'
+                          }}>
+                            Severity:
+                          </div>
+                          <div style={{ fontSize: '13px', fontWeight: 600, color: '#374151' }}>
+                            Importance {alert.importance}
+                          </div>
+                        </div>
+
+                        <div style={{ flex: 1, minWidth: '200px' }}>
+                          <div style={{ 
+                            fontSize: '10px', 
+                            fontWeight: 700, 
+                            color: isBlock ? '#991b1b' : '#9a3412', 
+                            textTransform: 'uppercase', 
+                            letterSpacing: '0.05em',
+                            marginBottom: '2px'
+                          }}>
+                            Action:
+                          </div>
+                          <div style={{ 
+                            fontSize: '13px', 
+                            fontWeight: 700, 
+                            color: isBlock ? '#b91c1c' : '#c2410c' 
+                          }}>
+                            {action}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
               {renderMarkdown(enhancedResponse)}
             </div>
           ) : (

@@ -239,13 +239,18 @@ h1, h2, h3, h4, h5, h6 {
 .patient-selector-section h2 {
   font-size: 11px; 
   font-weight: 800; 
-  color: var(--text-secondary);
-  margin-bottom: 12px; 
+  color: var(--accent-purple);
+  margin-bottom: 16px; 
   text-transform: uppercase; 
-  letter-spacing: 0.1em;
-  display: flex;
+  letter-spacing: 0.08em;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
+  background: rgba(124, 58, 237, 0.06);
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(124, 58, 237, 0.15);
+  box-shadow: 0 1px 2px rgba(124, 58, 237, 0.02);
 }
 .patient-selector-section h2::before {
   content: '';
@@ -410,8 +415,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 .patient-card-header {
   padding: 20px 24px;
-  background: #f8fafc;
+  background: linear-gradient(to right, rgba(8, 145, 178, 0.02), transparent);
   border-bottom: 1px solid var(--border);
+  border-left: 4px solid var(--accent-cyan);
 }
 .patient-name-row { 
   display: flex; 
@@ -620,8 +626,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 .safety-header {
   padding: 18px 24px; 
-  background: rgba(22, 163, 74, 0.03);
+  background: linear-gradient(to right, rgba(22, 163, 74, 0.03), transparent);
   border-bottom: 1px solid var(--border);
+  border-left: 4px solid var(--accent-emerald);
   display: flex; 
   justify-content: space-between; 
   align-items: center; 
@@ -774,18 +781,18 @@ h1, h2, h3, h4, h5, h6 {
   border-left-color: var(--danger-red);
 }
 .alert-severe {
-  background: #fffbeb; 
-  border-color: #fef3c7; 
-  border-left-color: var(--warning-amber);
+  background: #fff7ed; 
+  border-color: #ffedd5; 
+  border-left-color: #ea580c; /* Orange */
 }
 .alert-moderate {
-  background: #fffbeb; 
-  border-color: #fef3c7; 
-  border-left-color: #f97316;
+  background: #fefce8; 
+  border-color: #fef9c3; 
+  border-left-color: var(--warning-amber); /* Amber/Yellow */
 }
 .alert-minor {
-  background: #eff6ff; 
-  border-color: #dbeafe; 
+  background: #f0f9ff; 
+  border-color: #e0f2fe; 
   border-left-color: var(--accent-blue);
 }
 .alert-info {
@@ -868,12 +875,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 .question-section h2 { 
   font-size: 15px; 
-  font-weight: 700; 
+  font-weight: 800; 
   margin-bottom: 14px; 
   color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 8px;
+  border-left: 4px solid var(--accent-blue);
+  padding-left: 12px;
 }
 .question-input-wrapper {
   position: relative;
@@ -1044,9 +1053,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 .response-header-generic { 
   background: rgba(220, 38, 38, 0.02); 
+  border-left: 4px solid var(--danger-red);
 }
 .response-header-enhanced { 
   background: rgba(22, 163, 74, 0.02); 
+  border-left: 4px solid var(--accent-emerald);
 }
 .response-title-area {
   display: flex;
@@ -1449,14 +1460,14 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid rgba(220, 38, 38, 0.15);
 }
 .severity-severe {
-  background: #fef3c7;
-  color: var(--warning-amber);
-  border: 1px solid rgba(217, 119, 6, 0.15);
+  background: #ffedd5;
+  color: #ea580c; /* Orange */
+  border: 1px solid rgba(234, 88, 12, 0.15);
 }
 .severity-moderate {
-  background: #fef3c7;
-  color: #c2410c;
-  border: 1px solid rgba(249, 115, 22, 0.15);
+  background: #fef9c3;
+  color: #b45309; /* Amber */
+  border: 1px solid rgba(217, 119, 6, 0.15);
 }
 .severity-info {
   background: #e0f2fe;

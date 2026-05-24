@@ -61,7 +61,7 @@ function getSeverityInfo(severity: AlertSeverity): SeverityBadgeInfo {
     case 'HARD_BLOCK':
       return { label: 'Contraindicated', badgeClass: 'severity-block', iconColor: 'var(--danger-red)' };
     case 'SEVERE':
-      return { label: 'Severe Risk', badgeClass: 'severity-severe', iconColor: 'var(--warning-amber)' };
+      return { label: 'Severe Risk', badgeClass: 'severity-severe', iconColor: '#ea580c' };
     case 'MODERATE':
       return { label: 'Moderate Warning', badgeClass: 'severity-moderate', iconColor: 'var(--warning-amber)' };
     case 'MINOR':
@@ -89,6 +89,7 @@ function getAlertIcon(type: string, severity: AlertSeverity) {
 
 function renderStructuredDetails(alert: SafetyAlert) {
   const details = alert.details;
+  const isCritical = alert.severity === 'HARD_BLOCK' || alert.severity === 'SEVERE';
 
   if (alert.type === 'drug_interaction') {
     // Expected format: "Mechanism: [mechanism]. Effect: [effect]" or "Current medication risk: [mechanism]. [effect]"
@@ -109,7 +110,7 @@ function renderStructuredDetails(alert: SafetyAlert) {
 
     return (
       <div className="alert-details-grid">
-        <span className="alert-details-label">Mechanism</span>
+        <span className="alert-details-label">{isCritical ? 'Why Blocked? / Mechanism' : 'Mechanism'}</span>
         <span className="alert-details-value">{mechanism}</span>
         {effect && (
           <>
@@ -129,7 +130,7 @@ function renderStructuredDetails(alert: SafetyAlert) {
 
     return (
       <div className="alert-details-grid">
-        <span className="alert-details-label">Reaction Record</span>
+        <span className="alert-details-label">{isCritical ? 'Why Blocked? / Allergy' : 'Reaction Record'}</span>
         <span className="alert-details-value">{trigger}</span>
         {drugClass && (
           <>
@@ -156,7 +157,7 @@ function renderStructuredDetails(alert: SafetyAlert) {
 
     return (
       <div className="alert-details-grid">
-        <span className="alert-details-label">Dosing Guideline</span>
+        <span className="alert-details-label">{isCritical ? 'Why Blocked? / Dosing' : 'Dosing Guideline'}</span>
         <span className="alert-details-value">{rule}</span>
         {egfrVal && (
           <>
@@ -166,6 +167,56 @@ function renderStructuredDetails(alert: SafetyAlert) {
         )}
       </div>
     );
+  }
+
+  if (alert.type === 'calculator') {
+    if (details.includes('Components:') && details.includes('Annual stroke risk:')) {
+      const parts = details.split('Annual stroke risk:');
+      const compStr = parts[0].replace('Components:', '').trim();
+      const strokeRisk = parts[1].replace(/\.$/, '').trim();
+      const components = compStr.split(',').map(c => c.trim()).filter(Boolean);
+      
+      return (
+        <div className="alert-details-grid">
+          <span className="alert-details-label">Risk Factors Detected</span>
+          <div className="alert-details-value">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px' }}>
+              {components.map((comp, idx) => (
+                <span key={idx} className="check-chip" style={{ background: '#f1f5f9', color: '#475569', borderColor: '#cbd5e1' }}>
+                  {comp}
+                </span>
+              ))}
+            </div>
+          </div>
+          <span className="alert-details-label">Estimated Stroke Risk</span>
+          <span className="alert-details-value" style={{ fontWeight: 800, color: 'var(--danger-red)' }}>{strokeRisk} per year</span>
+        </div>
+      );
+    }
+    
+    if (details.includes('Calculated from:')) {
+      const parts = details.split('Calculated from:');
+      const stageInfo = parts[0].trim();
+      const calcFrom = parts[1].replace(/\.$/, '').trim();
+      const variables = calcFrom.split(',').map(v => v.trim()).filter(Boolean);
+      
+      return (
+        <div className="alert-details-grid">
+          <span className="alert-details-label">Functional Stage</span>
+          <span className="alert-details-value" style={{ fontWeight: 600 }}>{stageInfo}</span>
+          <span className="alert-details-label">Formula Parameters</span>
+          <div className="alert-details-value">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px' }}>
+              {variables.map((v, idx) => (
+                <span key={idx} className="check-chip" style={{ background: '#f1f5f9', color: '#475569', borderColor: '#cbd5e1' }}>
+                  {v}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
   }
 
   // Fallback for calculators / info
@@ -191,7 +242,11 @@ export default function SafetyAlerts({ result, loading }: SafetyAlertsProps) {
   if (loading) {
     return (
       <div className="safety-panel">
-        <div className="safety-header">
+        <div className="safety-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '6px' }}>
+          <div style={{ fontSize: '10px', fontWeight: 800, color: 'var(--accent-emerald)', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <ShieldCheckIcon size={12} style={{ color: 'var(--accent-emerald)' }} />
+            <span>Deterministic Safety Shield</span>
+          </div>
           <h3>
             <SearchIcon className="inline-icon animate-pulse" size={16} style={{ color: 'var(--accent-cyan)' }} />
             <span>Safety Verification Running...</span>
@@ -215,7 +270,11 @@ export default function SafetyAlerts({ result, loading }: SafetyAlertsProps) {
   if (!result || !result.alerts) {
     return (
       <div className="safety-panel safety-empty">
-        <div className="safety-header">
+        <div className="safety-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '6px' }}>
+          <div style={{ fontSize: '10px', fontWeight: 800, color: 'var(--accent-emerald)', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <ShieldCheckIcon size={12} style={{ color: 'var(--accent-emerald)' }} />
+            <span>Deterministic Safety Shield</span>
+          </div>
           <h3>
             <ShieldIcon className="inline-icon" size={16} style={{ color: 'var(--accent-emerald)' }} />
             <span>Clinical Verification Log</span>
@@ -242,22 +301,28 @@ export default function SafetyAlerts({ result, loading }: SafetyAlertsProps) {
 
   return (
     <div className="safety-panel">
-      <div className="safety-header">
-        <h3>
-          <ShieldIcon className="inline-icon" size={16} style={{ color: 'var(--accent-emerald)' }} />
-          <span>Safety Verification Log</span>
-        </h3>
-        <div className="safety-meta">
-          <span className="safety-timing" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <ClockIcon size={12} style={{ color: 'var(--accent-emerald)' }} />
-            <span>{result.checkDurationMs}ms</span>
-          </span>
-          <span className="safety-count">
-            {hardBlocks.length > 0 && <span className="count-badge count-block">{hardBlocks.length} Block</span>}
-            {severeAlerts.length > 0 && <span className="count-badge count-severe">{severeAlerts.length} Severe</span>}
-            {moderateAlerts.length > 0 && <span className="count-badge count-moderate">{moderateAlerts.length} Mod</span>}
-            {minorAlerts.length > 0 && <span className="count-badge count-minor">{minorAlerts.length} Info</span>}
-          </span>
+      <div className="safety-header" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '6px' }}>
+        <div style={{ fontSize: '10px', fontWeight: 800, color: 'var(--accent-emerald)', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <ShieldCheckIcon size={12} style={{ color: 'var(--accent-emerald)' }} />
+          <span>Deterministic Safety Shield</span>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+          <h3>
+            <ShieldIcon className="inline-icon" size={16} style={{ color: 'var(--accent-emerald)' }} />
+            <span>Safety Verification Log</span>
+          </h3>
+          <div className="safety-meta">
+            <span className="safety-timing" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <ClockIcon size={12} style={{ color: 'var(--accent-emerald)' }} />
+              <span>{result.checkDurationMs}ms</span>
+            </span>
+            <span className="safety-count">
+              {hardBlocks.length > 0 && <span className="count-badge count-block">{hardBlocks.length} Block</span>}
+              {severeAlerts.length > 0 && <span className="count-badge count-severe">{severeAlerts.length} Severe</span>}
+              {moderateAlerts.length > 0 && <span className="count-badge count-moderate">{moderateAlerts.length} Mod</span>}
+              {minorAlerts.length > 0 && <span className="count-badge count-minor">{minorAlerts.length} Info</span>}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -281,7 +346,8 @@ export default function SafetyAlerts({ result, loading }: SafetyAlertsProps) {
             {result.alerts.map((alert, i) => {
               const alertId = `${alert.type}-${i}`;
               const isCalculator = alert.type === 'calculator';
-              const isExpanded = isCalculator || !!expandedAlerts[alertId];
+              const isCritical = alert.severity === 'HARD_BLOCK' || alert.severity === 'SEVERE';
+              const isExpanded = isCalculator || isCritical || !!expandedAlerts[alertId];
               const typeLabel = getAlertTypeLabel(alert.type);
               const severityInfo = getSeverityInfo(alert.severity);
               const IconComponent = getAlertIcon(alert.type, alert.severity);
