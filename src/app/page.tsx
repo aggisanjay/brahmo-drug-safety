@@ -463,7 +463,7 @@ export default function Home() {
             </div>
           </div>
           <div className="footer-right" style={{ display: 'flex', gap: '20px', fontSize: '11px', color: 'var(--text-secondary)' }}>
-            <span>Verified DB: 50 Drugs • 30 Interactions • 8 Cross-Reactions</span>
+            <span>Verified DB: 56 Drugs • 33 Interactions • 8 Cross-Reactions</span>
             <span>CKD-EPI 2021 & CHA₂DS₂-VASc Calculators</span>
           </div>
         </div>
